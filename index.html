@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calm Vibes Only</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 50%, #e0f2e0 100%);
+            min-height: 100vh;
+            color: #2d4a2d;
+            overflow-x: hidden;
+        }
+
+        .bamboo-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                radial-gradient(circle at 20% 30%, #4a7c59 2px, transparent 2px),
+                radial-gradient(circle at 80% 70%, #4a7c59 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, #4a7c59 1.5px, transparent 1.5px);
+            background-size: 200px 200px, 150px 150px, 180px 180px;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: #2d4a2d;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(45, 74, 45, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #5a7c5a;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .zen-circle {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #7fb069;
+            border-radius: 50%;
+            margin: 30px auto;
+            position: relative;
+            animation: gentleGlow 4s ease-in-out infinite alternate;
+        }
+
+        .zen-circle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #7fb069, #a8d5a8);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .name-input-container {
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 15px 25px;
+            border: 2px solid rgba(127, 176, 105, 0.3);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            font-size: 1.1rem;
+            color: #2d4a2d;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(127, 176, 105, 0.1);
+        }
+
+        .name-input:focus {
+            border-color: #7fb069;
+            box-shadow: 0 4px 20px rgba(127, 176, 105, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .name-input::placeholder {
+            color: #5a7c5a;
+            font-style: italic;
+        }
+
+        .prompt-container {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 8px 32px rgba(45, 74, 45, 0.1);
+            border: 1px solid rgba(127, 176, 105, 0.2);
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .prompt-text {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: #2d4a2d;
+            font-weight: 300;
+            max-width: 600px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #7fb069, #a8d5a8);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(127, 176, 105, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(127, 176, 105, 0.4);
+            background: linear-gradient(135deg, #6fa055, #95c295);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #7fb069, #a8d5a8);
+            border-radius: 0 100% 0 100%;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .leaf:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .leaf:nth-child(2) { left: 20%; animation-delay: 5s; }
+        .leaf:nth-child(3) { left: 30%; animation-delay: 10s; }
+        .leaf:nth-child(4) { left: 70%; animation-delay: 15s; }
+        .leaf:nth-child(5) { left: 80%; animation-delay: 3s; }
+
+        .main-breathing-visual {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .main-glow-circle {
+            width: 100px;
+            height: 100px;
+            border: 3px solid #7fb069;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            background: radial-gradient(circle, rgba(127, 176, 105, 0.3) 0%, rgba(127, 176, 105, 0.2) 50%, transparent 100%);
+            box-shadow: 0 0 25px rgba(127, 176, 105, 0.5);
+            animation: mainBreatheCircle 4s ease-in-out infinite;
+        }
+
+        .main-breathe-text {
+            font-style: italic;
+            color: #5a7c5a;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        @keyframes mainBreatheCircle {
+            0%, 100% {
+                transform: scale(0.8);
+                box-shadow: 0 0 15px rgba(127, 176, 105, 0.4);
+            }
+            50% {
+                transform: scale(1.4);
+                box-shadow: 0 0 40px rgba(127, 176, 105, 0.8);
+            }
+        }
+
+        .breathing-visual {
+            margin-top: 30px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .breathing-visual.active {
+            opacity: 1;
+        }
+
+        .glow-circle {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #7fb069;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            background: radial-gradient(circle, rgba(127, 176, 105, 0.2) 0%, rgba(127, 176, 105, 0.1) 50%, transparent 100%);
+            box-shadow: 0 0 20px rgba(127, 176, 105, 0.4);
+            animation: breatheCircle 4s ease-in-out infinite;
+        }
+
+        .breathe-text {
+            font-style: italic;
+            color: #5a7c5a;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        @keyframes breatheCircle {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(127, 176, 105, 0.4);
+            }
+            50% {
+                transform: scale(1.3);
+                box-shadow: 0 0 30px rgba(127, 176, 105, 0.6);
+            }
+        }
+
+        .breath-guide {
+            margin-top: 40px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .breath-guide.active {
+            opacity: 1;
+        }
+
+        .breath-circle {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #7fb069;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #5a7c5a;
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes gentleGlow {
+            from {
+                box-shadow: 0 0 20px rgba(127, 176, 105, 0.3);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(127, 176, 105, 0.5);
+            }
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .prompt-container {
+                padding: 30px 20px;
+                margin: 20px 10px;
+            }
+            
+            .prompt-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bamboo-bg"></div>
+    
+    <div class="floating-elements">
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Calm Vibes Only</h1>
+            <p class="subtitle">Find your center, one breath at a time</p>
+        </div>
+
+        <div class="name-input-container">
+            <input type="text" id="nameInput" placeholder="Enter your name" class="name-input">
+        </div>
+
+        <div class="prompt-container">
+            <p class="prompt-text" id="promptText">
+                Welcome to this peaceful space. Trust me it's not as bad as you think it is😇
+            </p>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">
+            Let's do this 😇
+        </button>
+
+        <div class="main-breathing-visual">
+            <div class="main-glow-circle"></div>
+            <p class="main-breathe-text">Breathe to the rhythm</p>
+        </div>
+
+        <div class="breathing-visual" id="breathingVisual">
+            <div class="glow-circle"></div>
+            <p class="breathe-text">Breathe to the rhythm</p>
+        </div>
+    </div>
+
+    <script>
+        const calmPrompts = [
+            "You are stronger than You know, braver than You feel, and more capable than You think.",
+            
+            "The world may be tough, but You're tougher. You've survived every challenge so far.",
+            
+            "You don't need to be perfect to be amazing. You're already enough, exactly as You are.",
+            
+            "Every storm You've weathered has made You more resilient. You're unbreakable.",
+            
+            "You have a unique light that no one else can dim. Let it shine through any darkness.",
+            
+            "Life is challenging, but You're not just surviving - You're thriving and growing stronger.",
+            
+            "Your past doesn't define You. Your strength, courage, and heart do.",
+            
+            "You've overcome 100% of Your worst days. That's an incredible track record.",
+            
+            "The world needs what You have to offer. Your presence here matters deeply.",
+            
+            "You are not too sensitive, too much, or too little. You are perfectly, authentically You.",
+            
+            "Every breath You take is proof of Your resilience. You keep going, and that's beautiful.",
+            
+            "You have survived things that could have broken You, yet here You are - still fighting.",
+            
+            "Your worth isn't determined by Your productivity, achievements, or others' opinions.",
+            
+            "You are allowed to take up space, have opinions, and prioritize Your own well-being.",
+            
+            "The challenges You face are temporary, but Your strength and character are permanent.",
+            
+            "You don't have to earn love, respect, or happiness. You deserve them simply for being You.",
+            
+            "Your sensitivity is a superpower. It allows You to feel deeply and love authentically.",
+            
+            "You've been through tough times before and emerged stronger. This time will be no different.",
+            
+            "Your story isn't over yet. The best chapters of Your life may still be unwritten.",
+            
+            "You are not behind in life. You're exactly where You need to be on Your unique journey.",
+            
+            "The world is better because You're in it. Your kindness creates ripples of positive change.",
+            
+            "You don't need anyone's permission to be proud of Yourself and Your progress.",
+            
+            "Your dreams and goals are valid, no matter what anyone else thinks about them.",
+            
+            "You have the power to choose Your response to any situation. That's true freedom.",
+            
+            "Every time You choose self-care, You're proving that You value Yourself. Keep choosing You.",
+            
+            "You are not Your mistakes. You are someone who learns, grows, and deserves forgiveness.",
+            
+            "Your inner strength has carried You through before. Trust it to carry You through again.",
+            
+            "You don't need to have it all figured out. Taking it one day at a time is enough.",
+            
+            "Your worth is inherent, not earned. Nothing You do or don't do can change that truth.",
+            
+            "You are capable of handling whatever life brings Your way. You always have been.",
+            
+            "The world may feel chaotic, but You carry peace within You. That's Your sanctuary.",
+            
+            "You've survived every single one of Your hardest days. You're a champion at resilience.",
+            
+            "Your voice matters. Your thoughts matter. Your feelings matter. You matter.",
+            
+            "You don't have to prove Your worth to anyone. It's not up for debate or negotiation.",
+            
+            "Every scar tells a story of survival. You are living proof that healing is possible.",
+            
+            "You are allowed to outgrow people, places, and versions of Yourself that no longer serve You.",
+            
+            "Your progress isn't always visible, but it's always happening. Trust the process.",
+            
+            "You have everything within You to create the life You want. Start believing in Yourself.",
+            
+            "The same heart that feels pain so deeply is also capable of incredible joy and love.",
+            
+            "You are not too much for the right people. You are exactly enough for those who matter.",
+            
+            "Your past struggles have equipped You with wisdom and strength that others admire.",
+            
+            "You don't need to shrink Yourself to make others comfortable. Take up Your full space.",
+            
+            "Every challenge You face is an opportunity to prove to Yourself how strong You really are.",
+            
+            "You are writing Your own story of resilience with every breath, every step, every choice.",
+            
+            "The world needs Your unique perspective, talents, and the love You have to give.",
+            
+            "You are not broken. You are a human being having a beautifully complex human experience.",
+            
+            "Your gentleness in a harsh world is not weakness - it's extraordinary courage.",
+            
+            "You've made it through difficult times before. You have the strength to do it again.",
+            
+            "Your worth is not conditional. It doesn't fluctuate based on Your mood or circumstances.",
+            
+            "You are allowed to feel proud of Yourself for small victories and everyday courage.",
+            
+            "The love and kindness You show others is a reflection of the beautiful soul You are.",
+            
+            "You don't need to be everything to everyone. Being authentic to Yourself is enough.",
+            
+            "Every time You choose hope over fear, You're choosing to bet on Your own strength.",
+            
+            "You are not defined by Your worst moments, but by how You rise after falling.",
+            
+            "Your heart has been broken before, yet it still chooses to love. That's incredible bravery.",
+            
+            "You don't need external validation to know Your worth. You are valuable simply because You exist.",
+            
+            "The world may be unpredictable, but Your ability to adapt and overcome is constant.",
+            
+            "You are allowed to be a work in progress. Growth is a lifelong journey, not a destination.",
+            
+            "Your struggles don't make You weak - they make You human, relatable, and strong.",
+            
+            "You have survived every challenge life has thrown at You so far. Your track record is perfect.",
+            
+            "You don't need to have all the answers. Asking questions and seeking growth shows wisdom.",
+            
+            "Your capacity for love, despite being hurt before, shows the resilience of Your spirit.",
+            
+            "You are not too old, too young, too late, or too early. You are right on time for Your life.",
+            
+            "The fact that You're seeking peace and growth shows Your commitment to becoming Your best self.",
+            
+            "You don't need to be fearless to be brave. Courage is feeling afraid and moving forward anyway.",
+            
+            "Your emotions are valid, Your experiences matter, and Your perspective adds value to the world.",
+            
+            "You have the strength to turn Your pain into power and Your struggles into wisdom.",
+            
+            "You are not responsible for other people's feelings, only for treating them with kindness.",
+            
+            "Every day You choose to keep going is a victory worth celebrating, no matter how small it feels.",
+            
+            "You don't need to be perfect to be loved. You're already loveable exactly as You are.",
+            
+            "Your journey is unique to You. Comparing it to others' journeys diminishes Your own beautiful path.",
+            
+            "The world needs Your specific brand of magic. No one else can contribute what You can.",
+            
+            "You are not Your thoughts, Your mistakes, or Your circumstances. You are so much more.",
+            
+            "Your ability to feel deeply is a gift. It allows You to experience life's beauty more fully.",
+            
+            "You don't need permission to prioritize Your mental health and well-being. Choose Yourself.",
+            
+            "Every time You've thought You couldn't go on, You've proven Yourself wrong. You're unstoppable.",
+            
+            "You are allowed to change Your mind, change direction, and change Your life at any time.",
+            
+            "Your worth doesn't decrease when someone fails to see it. Their blindness doesn't define You.",
+            
+            "You have the power to rewrite Your story starting today. Every moment offers a fresh beginning.",
+            
+            "The challenges You face are not punishments - they're opportunities to discover Your strength.",
+            
+            "You don't need to have life figured out. Being curious and open to growth is enough.",
+            
+            "Your existence makes a difference, even when You can't see the ripple effects of Your presence.",
+            
+            "You are allowed to be imperfect, to make mistakes, and to still be worthy of love and respect.",
+            
+            "The world is tough, but You're tougher. You're still here, still fighting, still growing.",
+            
+            "You don't need to earn Your place in this world. You belong here simply because You are.",
+            
+            "Your resilience is quiet but powerful. Every day You survive is proof of Your incredible strength.",
+            
+            "You are not a burden. You are a blessing, even when You don't feel like one.",
+            
+            "Your worth is not measured by what You produce, but by the love and light You bring.",
+            
+            "You have the right to take up space, speak Your truth, and live authentically.",
+            
+            "Every breath You take is a choice to keep going. Thank Yourself for that daily act of courage.",
+            
+            "You don't need to be strong all the time. Allowing Yourself to be vulnerable takes real strength.",
+            
+            "Your past has prepared You for this moment. You have everything You need within You right now.",
+            
+            "You are not too damaged to love or be loved. You are healing, growing, and becoming whole.",
+            
+            "The world needs Your unique gifts, even if You don't fully recognize what they are yet.",
+            
+            "You don't need to prove Yourself to anyone. Your worth is inherent and unchangeable.",
+            
+            "Every scar is evidence that You survived something that could have destroyed You. You're a warrior.",
+            
+            "You are allowed to be proud of how far You've come, even if You still have further to go.",
+            
+            "Your kindness in a difficult world is revolutionary. Keep being the light You wish to see.",
+            
+            "You don't need to have everything together. Taking life one moment at a time is perfectly enough.",
+            
+            "Your strength isn't measured by how much You can handle, but by Your willingness to keep trying.",
+            
+            "You are writing a story of resilience with Your life. Every chapter shows Your incredible courage.",
+            
+            "The world may feel overwhelming, but You have an inner peace that no external chaos can touch.",
+            
+            "You don't need anyone else's approval to validate Your dreams, goals, or the path You're choosing.",
+            
+            "Your heart has been through storms but still beats with hope. That's the truest form of strength.",
+            
+            "You are not defined by Your lowest moments, but by Your determination to rise above them.",
+            
+            "Every time You choose self-compassion over self-criticism, You're choosing to heal and grow.",
+            
+            "You have survived every storm so far. You're not just a survivor - You're a thriver.",
+            
+            "Your worth doesn't fluctuate with Your mood, achievements, or the opinions of others. It's constant.",
+            
+            "You are allowed to rest, to say no, and to prioritize Your well-being without feeling guilty.",
+            
+            "The fact that You're still here, still trying, still hoping - that alone makes You extraordinary."
+        ];
+
+        let currentPromptIndex = -1;
+
+        function generatePrompt() {
+            const nameInput = document.getElementById('nameInput');
+            const userName = nameInput.value.trim();
+            
+            // Ensure we don't repeat the same prompt twice in a row
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * calmPrompts.length);
+            } while (newIndex === currentPromptIndex && calmPrompts.length > 1);
+            
+            currentPromptIndex = newIndex;
+            
+            const promptText = document.getElementById('promptText');
+            const breathGuide = document.getElementById('breathGuide');
+            
+            // Fade out current prompt
+            promptText.style.opacity = '0';
+            
+            setTimeout(() => {
+                let personalizedPrompt = calmPrompts[currentPromptIndex];
+                
+                // Add personalization if name is provided
+                if (userName) {
+                    personalizedPrompt = `${userName}, ${personalizedPrompt.toLowerCase()}`;
+                }
+                
+                promptText.textContent = personalizedPrompt;
+                promptText.style.opacity = '1';
+                
+                // Show breathing visual after prompt appears
+                setTimeout(() => {
+                    const breathingVisual = document.getElementById('breathingVisual');
+                    breathingVisual.classList.add('active');
+                }, 1000);
+            }, 300);
+        }
+
+        // Add some gentle interaction sounds (visual feedback)
+        document.querySelector('.generate-btn').addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
